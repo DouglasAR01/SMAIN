@@ -29,9 +29,10 @@ namespace MicroServicio.Controllers
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public string Get(string id)
         {
-            return "value";
+            var resultado = context.Usuario.Find(id);
+            return resultado.ToString();
         }
 
         // POST api/<controller>
