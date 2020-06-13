@@ -14,39 +14,19 @@ using Microsoft.AspNetCore.Mvc;
 namespace MicroServicio.Controllers
 {
     [Authorize]
+    [ApiController]
     [Route("api/[controller]")]
     public class UsuarioController : Controller
     {
-        private IUserService _userService;
+        protected IUserService _userService;
 
-        private readonly AppDbContext context;
+        protected readonly AppDbContext context;
         public UsuarioController(AppDbContext context, IUserService userService)
         {
             this.context = context;
             _userService = userService;
         }
-
-        [AllowAnonymous]
-        [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]Usuario userParam)
-        {
-            Debug.WriteLine("Entro a authenticate------------------------------------");
-            var user = _userService.Authenticate(userParam.cedula, userParam.password);
-
-            if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
-
-            return Ok(user);
-        }
-
-        [Authorize(Roles = "a")]
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            Debug.WriteLine("Entro a getAll------------------------------------");
-            var users = _userService.GetAll();
-            return Ok(users);
-        }
+        
 
         [HttpGet("{id}")]
         public IActionResult GetById(string id)
