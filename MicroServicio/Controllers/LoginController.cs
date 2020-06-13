@@ -28,6 +28,7 @@ namespace MicroServicio.Controllers
 
         [AllowAnonymous]
         [HttpPost]
+        [Route("authenticate")]
         public IActionResult Authenticate([FromBody]Usuario userParam)
         {
             var user = _userService.Authenticate(userParam.cedula, userParam.password);
