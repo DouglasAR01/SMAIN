@@ -9,8 +9,8 @@ namespace MicroServicio.Entities
     public class Cuenta
     {
         [Key]
-        public ulong Cta_id { get; set; }
-        public decimal cta_balance { get; set; }
-        public string fk_usr_cedula { get; set; }
+        public ulong id { get; set; }
+        public decimal balance { get; set; }
+        public string cedula { get; set; }
     }
 }
