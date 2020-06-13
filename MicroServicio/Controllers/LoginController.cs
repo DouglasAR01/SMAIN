@@ -33,7 +33,7 @@ namespace MicroServicio.Controllers
             var user = _userService.Authenticate(userParam.cedula, userParam.password);
 
             if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+                return BadRequest(new { message = "Cedula o contraseña incorrecta" });
 
             return Ok(user);
         }

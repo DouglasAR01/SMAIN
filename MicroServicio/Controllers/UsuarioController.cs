@@ -48,5 +48,15 @@ namespace MicroServicio.Controllers
             return Ok(user);
         }
 
+        [HttpPost("cuentas")]
+        public IActionResult GetMisCuentas()
+        {
+            ICuentaService cuentaObj = new CuentaService(this.context);
+
+            IEnumerable<Cuenta> cuentas = cuentaObj.GetByUser(User.Identity.Name);
+
+            return Ok(cuentas);
+        }
+
     }
 }
