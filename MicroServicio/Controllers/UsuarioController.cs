@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MicroServicio.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class UsuarioController : Controller
     {
@@ -59,7 +60,7 @@ namespace MicroServicio.Controllers
 
             // only allow admins to access other user records
             var currentUserId = User.Identity.Name;
-            if (id != currentUserId && !User.IsInRole("1"))
+            if (id != currentUserId && !User.IsInRole("a"))
             {
                 return Forbid();
             }
