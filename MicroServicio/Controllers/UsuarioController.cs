@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MicroServicio.Controllers
 {
-    [Route("")]
+    [Route("api/[controller]")]
     public class UsuarioController : Controller
     {
         private IUserService _userService;
@@ -26,7 +26,7 @@ namespace MicroServicio.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("Authenticate")]
+        [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]Usuario userParam)
         {
             Debug.WriteLine("Entro a authenticate------------------------------------");
@@ -38,7 +38,7 @@ namespace MicroServicio.Controllers
             return Ok(user);
         }
 
-        [Authorize("1")]
+        [Authorize(Roles = "a")]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -67,30 +67,5 @@ namespace MicroServicio.Controllers
             return Ok(user);
         }
 
-        // GET api/<controller>/5
-        /*[HttpGet("{id}")]
-        public string Get(string id)
-        {
-            var resultado = context.Usuario.Find(id);
-            return resultado.ToString();
-        }
-
-        // POST api/<controller>
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }*/
     }
 }

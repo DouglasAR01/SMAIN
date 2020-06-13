@@ -4,7 +4,7 @@ CREATE  TABLE Usuario(
   nombre_2 VARCHAR(30),
   apellido_1 VARCHAR(30) NOT NULL,
   apellido_2 VARCHAR(30),
-  admin BOOLEAN NOT NULL,
+  role VARCHAR(1) NOT NULL DEFAULT 'u',
   password VARCHAR(10) NOT NULL,
   token VARCHAR(250) NULL,
   PRIMARY KEY (cedula)
@@ -25,7 +25,7 @@ INSERT INTO Usuario(
   nombre_2,
   apellido_1,
   apellido_2,
-  admin,
+  role,
   password
 ) VALUES (
   "101",
@@ -33,7 +33,7 @@ INSERT INTO Usuario(
   "Ximena",
   "Jímenez",
   "Altozano",
-  1,
+  "a",
   "prueba"
 );
 INSERT INTO Usuario(
@@ -42,7 +42,7 @@ INSERT INTO Usuario(
   nombre_2,
   apellido_1,
   apellido_2,
-  admin,
+  role,
   password
 ) VALUES (
   "102",
@@ -50,7 +50,7 @@ INSERT INTO Usuario(
   "Alejandro",
   "Ramirez",
   "Toloza",
-  0,
+  "u",
   "prueba"
 );
 INSERT INTO Usuario(
@@ -59,7 +59,7 @@ INSERT INTO Usuario(
   nombre_2,
   apellido_1,
   apellido_2,
-  admin,
+  role,
   password
 ) VALUES (
   "103",
@@ -67,7 +67,7 @@ INSERT INTO Usuario(
   "Alexander",
   "Guevara",
   "Cifuentes",
-  0,
+  "u",
   "prueba"
 );
 

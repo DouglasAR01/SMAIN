@@ -14,7 +14,7 @@ namespace MicroServicio.Entities
         public string nombre_2 { get; set; }
         public string apellido_1 { get; set; }
         public string apellido_2 { get; set; }
-        public bool admin  { get; set; }
+        public string role  { get; set; }
         public string password { get; set; }
         public string token { get; set; }
 
