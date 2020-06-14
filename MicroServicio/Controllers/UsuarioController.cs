@@ -40,7 +40,7 @@ namespace MicroServicio.Controllers
         /// <response code="403"> No es administrador e intenta obtener datos de otro usuario. </response>
         /// <response code="404"> No existe un usuario con la cedula administrada.  </response>
         [HttpGet("{id}")]
-        public IActionResult GetById(string id)
+        public virtual IActionResult GetById(string id)
         {
             var user = _userService.GetById(id);
 

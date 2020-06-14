@@ -6,7 +6,7 @@ CREATE  TABLE Usuario(
   apellido_1 VARCHAR(30) NOT NULL,
   apellido_2 VARCHAR(30),
   role VARCHAR(1) NOT NULL DEFAULT 'u',
-  password VARCHAR(10) NOT NULL,
+  password VARCHAR(250) NOT NULL,
   token VARCHAR(250) NULL,
   PRIMARY KEY (id)
 );
@@ -35,7 +35,7 @@ INSERT INTO Usuario(
   "Jímenez",
   "Altozano",
   "a",
-  "prueba"
+  "10000.Nt4CLuTG9HcTjBpVGHIbxw==.C8kRrrfdIJGykx/mgRKLSoekELiSZ9GuvD1wJf59/Wg="
 );
 INSERT INTO Usuario(
   cedula,
@@ -52,7 +52,7 @@ INSERT INTO Usuario(
   "Ramirez",
   "Toloza",
   "u",
-  "prueba"
+  "10000.6tkH8lpPswIipllBh0Bq0w==.L4eA0UyorFLev/H2adONgiIVPgPy5W7jAS73C+E0qwI="
 );
 INSERT INTO Usuario(
   cedula,
@@ -69,7 +69,7 @@ INSERT INTO Usuario(
   "Guevara",
   "Cifuentes",
   "u",
-  "prueba"
+  "10000.wZexdJ6CfBwLyd6Vp2rHxA==.dKphmaoaEnDhPBvD/ECWyZoAcnRYA0n2axycyxvUSQM="
 );
 
 -- INSERCIONES DE BALANCES (EN EUROS) --

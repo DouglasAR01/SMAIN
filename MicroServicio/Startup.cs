@@ -92,6 +92,7 @@ namespace MicroServicio
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 x.IncludeXmlComments(xmlPath);
             });
+            services.Configure<HashingOptions>(Configuration.GetSection("HashingOptions"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

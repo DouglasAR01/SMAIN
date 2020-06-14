@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using MicroServicio.Contexts;
@@ -24,6 +26,11 @@ namespace MicroServicio.Controllers
         public IActionResult GetAll()
         {
             return Ok(_userService.GetAll());
+        }
+
+        [HttpGet("users/{id}")]
+        public override IActionResult GetById(string id){
+            return base.GetById(id);
         }
 
         [HttpPost("users")]
@@ -78,21 +85,28 @@ namespace MicroServicio.Controllers
         [HttpPatch("cuentas/{id}/editar")]
         public IActionResult EditarBalance([FromBody]CuentaValidator cuenta)
         {
-            if (cuenta.numCuenta == 0)
+            try
             {
-                return BadRequest("Número de cuenta inválido.");
-            }
+                ulong? numCuenta = Convert.ToUInt64(cuenta.numCuenta);
+                decimal? nuevoBalance = Convert.ToDecimal(
+                    cuenta.nuevoBalance,
+                    new NumberFormatInfo() { NumberDecimalSeparator = "." });
 
-            ICuentaService cuentaService = new CuentaService(this.context);
+                ICuentaService cuentaService = new CuentaService(this.context);
 
-            Cuenta cuentaOriginal = cuentaService.GetById(cuenta.numCuenta);
-            if (cuentaOriginal == null)
+                Cuenta cuentaOriginal = cuentaService.GetById(numCuenta);
+                if (cuentaOriginal == null)
+                {
+                    return NotFound(new { message = "Cuenta no encontrada." });
+                }
+
+                cuentaService.SetBalance(cuentaOriginal, nuevoBalance);
+                return Ok(new { numCuenta = cuentaOriginal.id, nuevoBalance = cuentaOriginal.balance });
+            } catch (Exception)
             {
-                return NotFound(new { message = "Cuenta no encontrada." });
-            }
-
-            cuentaService.SetBalance(cuentaOriginal, cuenta.nuevoBalance);
-            return Ok(new { numCuenta = cuentaOriginal.id, nuevoBalance = cuentaOriginal.balance });
+                return BadRequest(new { message = "Número de cuenta o balance en formato incorrecto." });
+            }           
+                        
         }
 
     }

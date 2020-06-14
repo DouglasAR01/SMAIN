@@ -25,22 +25,27 @@ namespace MicroServicio.Services
     public class UserService : IUserService
     {
         private readonly AppSettings _appSettings;
+        private readonly IOptions<HashingOptions> _hashingOptions;
         private readonly AppDbContext _context;
 
-        public UserService(IOptions<AppSettings> appSettings, AppDbContext context)
+        public UserService(IOptions<AppSettings> appSettings, AppDbContext context, IOptions<HashingOptions> hashingOptions)
         {
             _appSettings = appSettings.Value;
             _context = context;
+            _hashingOptions = hashingOptions;
         }
 
         public Usuario Authenticate(string cedula, string password)
         {
-            var user = _context.Usuario.Where( x=> x.cedula == cedula  && x.password == password).FirstOrDefault();
-
+            IPasswordHasher passwordHasher = new PasswordHasher(_hashingOptions);
+            var user = _context.Usuario.Where( x=> x.cedula == cedula).FirstOrDefault();
             // return null if user not found
             if (user == null)
                 return null;
 
+            var (check, _) = passwordHasher.Check(user.password, password);
+            if (!check)
+                return null;
             // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -82,11 +87,13 @@ namespace MicroServicio.Services
 
         public Usuario UpdateData(Usuario original, UsuarioValidator updated)
         {
+            IPasswordHasher passwordHasher = new PasswordHasher(_hashingOptions);
+            string hashedPassword = passwordHasher.Hash(updated.password);
             original.nombre_1 = updated.nombre_1;
             original.nombre_2 = updated.nombre_2;
             original.apellido_1 = updated.apellido_1;
             original.apellido_2 = updated.apellido_2;
-            original.password = updated.password;
+            original.password = hashedPassword;
             original.role = updated.role;
             original.cedula = updated.cedula;
             try
@@ -116,6 +123,8 @@ namespace MicroServicio.Services
 
         public Usuario CreateUser(UsuarioValidator nuevoUsuario)
         {
+            IPasswordHasher passwordHasher = new PasswordHasher(_hashingOptions);
+            string hashedPassword = passwordHasher.Hash(nuevoUsuario.password);
             Usuario usuario = new Usuario()
             {
                 cedula = nuevoUsuario.cedula,
@@ -124,7 +133,7 @@ namespace MicroServicio.Services
                 apellido_1 = nuevoUsuario.apellido_1,
                 apellido_2 = nuevoUsuario.apellido_2,
                 role = nuevoUsuario.role,
-                password = nuevoUsuario.password
+                password = hashedPassword
             };
             try
             {

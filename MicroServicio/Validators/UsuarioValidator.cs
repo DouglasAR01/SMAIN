@@ -23,7 +23,7 @@ namespace MicroServicio.Validators
         [StringLength(30, ErrorMessage = "El segundo apellido no puede superar los 30 caracteres.")]
         public string apellido_2 { get; set; }
         [Required(ErrorMessage = "El rol no debe ser nulo")]
-        [RegularExpression(@"[a|u]{1}", ErrorMessage = "El rol debe ser 'a' o 'u'")]
+        [RegularExpression(@"^[a|u]{1}$", ErrorMessage = "El rol debe ser 'a' o 'u'")]
         public string role { get; set; }
         [Required(ErrorMessage = "La contraseña no puede ser nula")]
         public string password { get; set; }
