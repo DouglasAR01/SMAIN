@@ -5,9 +5,11 @@ using System.Globalization;
 using MicroServicio.Contexts;
 using MicroServicio.Entities;
 using MicroServicio.Services;
+using MicroServicio.SwaggerExamples.Requests;
 using MicroServicio.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,7 +33,7 @@ namespace MicroServicio.Controllers
         ///     Si es administrador permite ver de forma individal los datos de los usuarios, 
         ///     si no es administrador solo puede ver sus propios datos.
         /// </summary>
-        /// <param name="id"> Cedula de un usuario </param>
+        /// <param name="id" example="101"> Cedula de un usuario </param>
         /// <remarks>
         ///     Request **simple**:
         ///         GET /api/usuario/{id}
@@ -92,6 +94,7 @@ namespace MicroServicio.Controllers
         /// <response code="200"> Transaccion efectuada con exito. </response>
         /// <response code="403"> No logeado o intenta transferir de una cuenta de la que no es propietaria. </response>
         [HttpPost("transferir")]
+        [SwaggerRequestExample(typeof(DatosTransferir), typeof(TransferirExample))]
         public IActionResult Transferir([FromBody]DatosTransferir data )
         {
             try{

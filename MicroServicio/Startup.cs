@@ -20,6 +20,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace MicroServicio
 {
@@ -69,6 +70,7 @@ namespace MicroServicio
             services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc("v1", new OpenApiInfo{ Title = "SMAIN", Version = "v1" });
+                x.ExampleFilters();
                 x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
                     Description = "JWT Athorization. Escribir 'Bearer' justo antes del token y dejar un espacio de por medio",
                     Name = "Authorization",
@@ -92,6 +94,7 @@ namespace MicroServicio
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 x.IncludeXmlComments(xmlPath);
             });
+            services.AddSwaggerExamplesFromAssemblyOf<Startup>();
             services.Configure<HashingOptions>(Configuration.GetSection("HashingOptions"));
         }
 
