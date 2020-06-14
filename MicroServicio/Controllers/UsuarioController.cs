@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using MicroServicio.Contexts;
 using MicroServicio.Entities;
 using MicroServicio.Services;
+using MicroServicio.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,6 +52,40 @@ namespace MicroServicio.Controllers
             ICuentaService cuentaObj = new CuentaService(this.context);
             IEnumerable<Cuenta> cuentas = cuentaObj.GetByUser(User.Identity.Name);
             return Ok(cuentas);
+        }
+
+        [HttpPost("transferir")]
+        public IActionResult Transferir([FromBody]DatosTransferir data )
+        {
+
+            ICuentaService cuentaService = new CuentaService(this.context);
+
+            //Verifica el monto
+            if( data.monto <= 0){
+                return BadRequest(new { message = "El monto a transferir no puede ser negativo o igual a 0." });
+            }
+
+            //Veridica que el usuario logeado sea el propietario de la cuenta de origen
+            if ( !cuentaService.IsUserOwner(data.numCuentaOrigen, User.Identity.Name) ){
+                return Forbid();
+            }
+
+            //Verifica que el nombre otorgado del usuario de desstino corresponda con la cuenta el nombre del propietario de la cuenta de destino
+            if ( !cuentaService.IsNameUserOwner(data.numCuentaDestino, data.nameDestino) ){
+                return BadRequest(new { message = "El nombre no coincide con el propietario de la cuenta de destino." });
+            }
+
+            //Verifica que tiene fondos sufucientes
+            if ( !cuentaService.IsEnoughMoney(data.numCuentaOrigen, data.monto) ){
+                return BadRequest(new { message = "No tiene los fondos suficientes para realizar esta transaccion." });
+            }
+
+            try{
+                cuentaService.Transaccion(data.numCuentaOrigen, data.numCuentaDestino, data.monto);
+                return Ok("Exito");
+            }catch(Exception){
+                return BadRequest(new { message = "Error en el servidor." });
+            }
         }
 
     }
