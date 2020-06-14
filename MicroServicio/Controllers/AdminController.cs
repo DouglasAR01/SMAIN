@@ -29,14 +29,10 @@ namespace MicroServicio.Controllers
         [HttpPost("users")]
         public IActionResult CrearUsuario([FromBody]UsuarioValidator atributosUsuario)
         {
-            if (!UsuarioValidator.ValidarDatosUsuario(atributosUsuario))
-            {
-                return BadRequest();
-            }
             Usuario nuevoUsuario = _userService.CreateUser(atributosUsuario);
             if (nuevoUsuario == null)
             {
-                return BadRequest();
+                return BadRequest(new { message = "No se pudo crear el usuario." });
             }
             return Ok(nuevoUsuario);
         }
@@ -49,21 +45,17 @@ namespace MicroServicio.Controllers
 
             if (usuario == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Usuario no encontrado." });
             }
 
-            if (!UsuarioValidator.ValidarDatosUsuario(atributosUsuario))
-            {
-                return BadRequest();
-            }
             usuario = _userService.UpdateData(usuario, atributosUsuario);
 
             if (usuario == null)
             {
-                return BadRequest();
+                return BadRequest(new { message = "El usuario no ha podido ser modificado." });
             }
 
-            return Ok(atributosUsuario);
+            return Ok(usuario);
         }
 
         [HttpDelete("users/{id}/eliminar")]
@@ -73,16 +65,34 @@ namespace MicroServicio.Controllers
 
             if (usuario == null)
             {
-                return NotFound();
+                return NotFound(new { message="Usuario no encontrado." });
             }
 
             if (_userService.DeteleUser(usuario))
             {
-                return Ok();
+                return Ok(new { message = "Usuario eliminado." });
             }
-            return BadRequest();
+            return BadRequest(new { message = "El usuario no ha podido ser eliminado." });
         }
 
-        
+        [HttpPatch("cuentas/{id}/editar")]
+        public IActionResult EditarBalance([FromBody]CuentaValidator cuenta)
+        {
+            if (cuenta.numCuenta == 0)
+            {
+                return BadRequest("Número de cuenta inválido.");
+            }
+
+            ICuentaService cuentaService = new CuentaService(this.context);
+
+            Cuenta cuentaOriginal = cuentaService.GetById(cuenta.numCuenta);
+            if (cuentaOriginal == null)
+            {
+                return NotFound(new { message = "Cuenta no encontrada." });
+            }
+
+            cuentaService.SetBalance(cuentaOriginal, cuenta.nuevoBalance);
+            return Ok(new { numCuenta = cuentaOriginal.id, nuevoBalance = cuentaOriginal.balance });
+        }
     }
 }

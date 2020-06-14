@@ -93,7 +93,7 @@ namespace MicroServicio.Services
             {
                 _context.Update(original);
                 _context.SaveChanges();
-            } catch
+            } catch (Exception)
             {
                 return null;
             }
@@ -106,7 +106,7 @@ namespace MicroServicio.Services
             {
                 _context.Remove(usuario);
                 _context.SaveChanges();
-            } catch
+            } catch (Exception)
             {
                 return false;
             }
@@ -130,7 +130,7 @@ namespace MicroServicio.Services
             {
                 _context.Usuario.Add(usuario);
                 _context.SaveChanges();
-            } catch
+            } catch (Exception)
             {
                 return null;
             }

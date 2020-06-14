@@ -15,11 +15,12 @@ namespace MicroServicio.Services
     {
         IEnumerable<Cuenta> GetAll();
         IEnumerable<Cuenta> GetByUser(string cedula);
-        Cuenta GetById(int id);
+        Cuenta GetById(ulong? id);
         bool IsUserOwner(ulong? cuenta, string cedula);
         bool IsNameUserOwner(ulong? cuenta, string name);
         bool IsEnoughMoney(ulong? cuenta, decimal? monto);
         void Transaccion(ulong? cuentaOrigen, ulong? cuentaDestino, decimal? monto);
+        void SetBalance(Cuenta cuenta, decimal? newBalance);
     }
 
     public class CuentaService : ICuentaService
@@ -63,9 +64,15 @@ namespace MicroServicio.Services
             _context.SaveChanges();
         }
 
-        public Cuenta GetById(int id){
+        public Cuenta GetById(ulong? id){
             var cuenta = _context.Cuenta.Find(id);
             return cuenta;
+        }
+
+        public void SetBalance(Cuenta cuenta, decimal? newBalance)
+        {
+            cuenta.balance = newBalance;
+            _context.SaveChanges();
         }
     }
 }
