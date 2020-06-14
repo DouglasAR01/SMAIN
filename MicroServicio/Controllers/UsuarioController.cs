@@ -15,7 +15,7 @@ namespace MicroServicio.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/users")]
     public class UsuarioController : Controller
     {
         protected IUserService _userService;
