@@ -70,10 +70,10 @@ namespace MicroServicio
             {
                 x.SwaggerDoc("v1", new OpenApiInfo{ Title = "SMAIN", Version = "v1" });
                 x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
-                    Description = "JWT Athorization",
+                    Description = "JWT Athorization. Escribir 'Bearer' justo antes del token y dejar un espacio de por medio",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey
+                    Type = SecuritySchemeType.ApiKey,
                 });
                 x.AddSecurityRequirement(new OpenApiSecurityRequirement {
                     {
