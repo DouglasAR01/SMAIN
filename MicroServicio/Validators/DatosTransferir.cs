@@ -5,20 +5,19 @@ namespace MicroServicio.Validators
     public class DatosTransferir 
     {
         [Required(ErrorMessage = "El numero de cuenta de origen es requerido.")]
-        [Display(Name = "Numero de cuenta de origen")]
+        [RegularExpression(@"^\d+$", ErrorMessage = "El numero de cuenta de origen debe ser numerica y positiva.")]
         public ulong? numCuentaOrigen { get; set; }
 
         [Required(ErrorMessage = "El numero de cuenta de destino es requerido.")]
-        [Display(Name = "Numero de cuenta de destino")]
+        [RegularExpression(@"^\d+$", ErrorMessage = "El numero de cuenta de destino debe ser numerica y positiva.")]
         public ulong? numCuentaDestino { get; set; }
 
         [Required(ErrorMessage = "El nombre de usuario destino es requerido.")]
         [StringLength(125, ErrorMessage = "El nombre no puede superar los 125 caracteres.")]
-        [Display(Name = "Nombre de cuenta de destino")]
         public string nameDestino { get; set; }
 
         [Required(ErrorMessage = "El monto es requerido.")]
-        [Display(Name = "Monto")]
+        [RegularExpression(@"^\d+$", ErrorMessage = "El monto debe ser numerico y positivo.")]
         public decimal? monto { get;set; }
         
     }

@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace MicroServicio
 {
@@ -62,17 +63,27 @@ namespace MicroServicio
 
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            services.AddSwaggerGen(x =>
+            {
+                x.SwaggerDoc("v1", new OpenApiInfo{ Title = "SMAIN", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-           /* if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            /* if (env.IsDevelopment())
+             {
+                 app.UseDeveloperExceptionPage();
+             }
 
-            app.UseMvc();*/
+             app.UseMvc();*/
+
+            //Swagger configuration
+            var swaggerOptions = new SwaggerOptions();
+            Configuration.GetSection(nameof(swaggerOptions)).Bind(swaggerOptions);
+            app.UseSwagger(option => { option.RouteTemplate = swaggerOptions.JsonRoute; });
+            app.UseSwaggerUI(option => { option.SwaggerEndpoint(swaggerOptions.UiEndPoint, swaggerOptions.Description); });
 
             // global cors policy
             app.UseCors(x => x

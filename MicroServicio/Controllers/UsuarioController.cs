@@ -82,7 +82,7 @@ namespace MicroServicio.Controllers
 
             try{
                 cuentaService.Transaccion(data.numCuentaOrigen, data.numCuentaDestino, data.monto);
-                return Ok("Exito");
+                return Ok(new { message = "Transaccion efectuada con exito." });
             }catch(Exception){
                 return BadRequest(new { message = "Error en el servidor." });
             }
