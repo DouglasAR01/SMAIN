@@ -16,6 +16,7 @@ namespace MicroServicio.Services
         Usuario Authenticate(string cedula, string password);
         IEnumerable<Usuario> GetAll();
         Usuario GetById(string id);
+        Usuario UpdateData(Usuario usuario, Usuario atributosUsuario);
     }
 
     public class UserService : IUserService
@@ -74,6 +75,26 @@ namespace MicroServicio.Services
                 user.password = null;
 
             return user;
+        }
+
+        public Usuario UpdateData(Usuario original, Usuario updated)
+        {
+            original.nombre_1 = updated.nombre_1;
+            original.nombre_2 = updated.nombre_2;
+            original.apellido_1 = updated.apellido_1;
+            original.apellido_2 = updated.apellido_2;
+            original.password = updated.password;
+            original.role = updated.role;
+            original.cedula = updated.cedula;
+            try
+            {
+                _context.Update(original);
+                _context.SaveChanges();
+            } catch
+            {
+                return null;
+            }
+            return original;
         }
     }
 }

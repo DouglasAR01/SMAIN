@@ -1,5 +1,6 @@
 CREATE  TABLE Usuario(
-  cedula VARCHAR(10) NOT NULL,
+  id SERIAL,
+  cedula VARCHAR(10) NOT NULL UNIQUE,
   nombre_1 VARCHAR(30) NOT NULL,
   nombre_2 VARCHAR(30),
   apellido_1 VARCHAR(30) NOT NULL,
@@ -7,14 +8,14 @@ CREATE  TABLE Usuario(
   role VARCHAR(1) NOT NULL DEFAULT 'u',
   password VARCHAR(10) NOT NULL,
   token VARCHAR(250) NULL,
-  PRIMARY KEY (cedula)
+  PRIMARY KEY (id)
 );
 CREATE TABLE Cuenta(
   id SERIAL,
   balance DECIMAL NOT NULL,
-  cedula VARCHAR(10) NOT NULL,
+  id_usuario BIGINT UNSIGNED,
   PRIMARY KEY (id),
-  FOREIGN KEY (cedula) REFERENCES Usuario(cedula)
+  FOREIGN KEY (id_usuario) REFERENCES Usuario(id)
 );
 
 -- INSERCIONES DE USUARIOS --
@@ -72,6 +73,6 @@ INSERT INTO Usuario(
 );
 
 -- INSERCIONES DE BALANCES (EN EUROS) --
-INSERT INTO Cuenta(balance, cedula) VALUES ("1000","101");
-INSERT INTO Cuenta(balance, cedula) VALUES ("500","102");
-INSERT INTO Cuenta(balance, cedula) VALUES ("700","103");
+INSERT INTO Cuenta(balance, id) VALUES ("1000",1);
+INSERT INTO Cuenta(balance, id) VALUES ("500",2);
+INSERT INTO Cuenta(balance, id) VALUES ("700",3);
