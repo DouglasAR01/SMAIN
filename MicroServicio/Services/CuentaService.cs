@@ -35,11 +35,11 @@ namespace MicroServicio.Services
         }
 
         public IEnumerable<Cuenta> GetByUser(string cedula){
-            return _context.Cuenta.Where(x=>x.cedula == cedula).ToList();
+            return _context.Cuenta.Where(x=>x.Usuario.cedula == cedula).ToList();
         }
 
         public bool IsUserOwner(ulong? cuenta, string cedula){
-            Cuenta cuentaObj = _context.Cuenta.FirstOrDefault(x => x.id.Equals(cuenta) && x.cedula == cedula);
+            Cuenta cuentaObj = _context.Cuenta.FirstOrDefault(x => x.id.Equals(cuenta) && x.Usuario.cedula == cedula);
             return cuentaObj != null;
         }
 

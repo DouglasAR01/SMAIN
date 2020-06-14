@@ -17,7 +17,7 @@ namespace MicroServicio.Entities
         public decimal? balance { get; set;}
 
         [ForeignKey("Usuario")]
-        public string cedula { get; set; }
+        public ulong id_usuario { get; set; }
         public Usuario Usuario { get; set; }
     }
 }
