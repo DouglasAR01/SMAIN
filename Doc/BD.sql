@@ -73,6 +73,6 @@ INSERT INTO Usuario(
 );
 
 -- INSERCIONES DE BALANCES (EN EUROS) --
-INSERT INTO Cuenta(balance, id) VALUES ("1000",1);
-INSERT INTO Cuenta(balance, id) VALUES ("500",2);
-INSERT INTO Cuenta(balance, id) VALUES ("700",3);
+INSERT INTO Cuenta(balance, id_usuario) VALUES ("1000",1);
+INSERT INTO Cuenta(balance, id_usuario) VALUES ("500",2);
+INSERT INTO Cuenta(balance, id_usuario) VALUES ("700",3);
