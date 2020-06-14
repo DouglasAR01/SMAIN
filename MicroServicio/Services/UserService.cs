@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using MicroServicio.Entities;
 using MicroServicio.Helpers;
 using MicroServicio.Contexts;
+using MicroServicio.Validators;
 
 namespace MicroServicio.Services
 {
@@ -16,7 +17,7 @@ namespace MicroServicio.Services
         Usuario Authenticate(string cedula, string password);
         IEnumerable<Usuario> GetAll();
         Usuario GetById(string id);
-        Usuario UpdateData(Usuario usuario, Usuario atributosUsuario);
+        Usuario UpdateData(Usuario usuario, UsuarioValidator atributosUsuario);
     }
 
     public class UserService : IUserService
@@ -77,7 +78,7 @@ namespace MicroServicio.Services
             return user;
         }
 
-        public Usuario UpdateData(Usuario original, Usuario updated)
+        public Usuario UpdateData(Usuario original, UsuarioValidator updated)
         {
             original.nombre_1 = updated.nombre_1;
             original.nombre_2 = updated.nombre_2;

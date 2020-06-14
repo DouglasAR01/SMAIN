@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MicroServicio.Contexts;
 using MicroServicio.Entities;
 using MicroServicio.Services;
+using MicroServicio.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +20,14 @@ namespace MicroServicio.Controllers
 
         public AdminController(AppDbContext context, IUserService userService):base(context,userService){}
 
-        [HttpPatch]
-        [Route("{id}/editar")]
-        public IActionResult EditarUsuario(string id, [FromBody]Usuario atributosUsuario)
+        [HttpGet("users")]
+        public IActionResult GetAll()
+        {
+            return Ok(_userService.GetAll());
+        }
+
+        [HttpPatch("{id}/editar")]
+        public IActionResult EditarUsuario(string id, [FromBody]UsuarioValidator atributosUsuario)
         {
             var usuario = _userService.GetById(id);
 
@@ -30,9 +36,9 @@ namespace MicroServicio.Controllers
                 return NotFound();
             }
 
-            if (ValidarDatosUsuario(atributosUsuario))
+            if (!UsuarioValidator.ValidarDatosUsuario(atributosUsuario))
             {
-                return BadRequest();
+                return BadRequest(atributosUsuario.role);
             }
             usuario = _userService.UpdateData(usuario, atributosUsuario);
 
@@ -53,19 +59,6 @@ namespace MicroServicio.Controllers
         */
 
         // Retorna true si todas las validaciones se cumplen
-        private Boolean ValidarDatosUsuario(Usuario usuario)
-        {
-            if(!(usuario.role.Equals('a') || usuario.role.Equals('u')))
-            {
-                return false;
-            }
-
-            if (!ulong.TryParse(usuario.cedula, out _))
-            {
-                return false;
-            }
-
-            return true;
-        }
+        
     }
 }
