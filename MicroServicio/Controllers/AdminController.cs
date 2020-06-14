@@ -26,7 +26,23 @@ namespace MicroServicio.Controllers
             return Ok(_userService.GetAll());
         }
 
-        [HttpPatch("{id}/editar")]
+        [HttpPost("users")]
+        public IActionResult CrearUsuario([FromBody]UsuarioValidator atributosUsuario)
+        {
+            if (!UsuarioValidator.ValidarDatosUsuario(atributosUsuario))
+            {
+                return BadRequest();
+            }
+            Usuario nuevoUsuario = _userService.CreateUser(atributosUsuario);
+            if (nuevoUsuario == null)
+            {
+                return BadRequest();
+            }
+            return Ok(nuevoUsuario);
+        }
+
+
+        [HttpPatch("users/{id}/editar")]
         public IActionResult EditarUsuario(string id, [FromBody]UsuarioValidator atributosUsuario)
         {
             var usuario = _userService.GetById(id);
@@ -38,7 +54,7 @@ namespace MicroServicio.Controllers
 
             if (!UsuarioValidator.ValidarDatosUsuario(atributosUsuario))
             {
-                return BadRequest(atributosUsuario.role);
+                return BadRequest();
             }
             usuario = _userService.UpdateData(usuario, atributosUsuario);
 
@@ -50,15 +66,23 @@ namespace MicroServicio.Controllers
             return Ok(atributosUsuario);
         }
 
-        /*[HttpDelete]
-        [Route]
-        public IActionResult eliminarUsuario()
+        [HttpDelete("users/{id}/eliminar")]
+        public IActionResult EliminarUsuario(string id)
         {
-            
-        }
-        */
+            var usuario = _userService.GetById(id);
 
-        // Retorna true si todas las validaciones se cumplen
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            if (_userService.DeteleUser(usuario))
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
         
     }
 }

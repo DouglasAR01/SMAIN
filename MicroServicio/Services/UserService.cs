@@ -18,6 +18,8 @@ namespace MicroServicio.Services
         IEnumerable<Usuario> GetAll();
         Usuario GetById(string id);
         Usuario UpdateData(Usuario usuario, UsuarioValidator atributosUsuario);
+        bool DeteleUser(Usuario usuario);
+        Usuario CreateUser(UsuarioValidator nuevoUsuario);
     }
 
     public class UserService : IUserService
@@ -96,6 +98,43 @@ namespace MicroServicio.Services
                 return null;
             }
             return original;
+        }
+
+        public bool DeteleUser(Usuario usuario)
+        {
+            try
+            {
+                _context.Remove(usuario);
+                _context.SaveChanges();
+            } catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public Usuario CreateUser(UsuarioValidator nuevoUsuario)
+        {
+            Usuario usuario = new Usuario()
+            {
+                cedula = nuevoUsuario.cedula,
+                nombre_1 = nuevoUsuario.nombre_1,
+                nombre_2 = nuevoUsuario.nombre_2,
+                apellido_1 = nuevoUsuario.apellido_1,
+                apellido_2 = nuevoUsuario.apellido_2,
+                role = nuevoUsuario.role,
+                password = nuevoUsuario.password
+            };
+            try
+            {
+                _context.Usuario.Add(usuario);
+                _context.SaveChanges();
+            } catch
+            {
+                return null;
+            }
+            return usuario;
         }
     }
 }

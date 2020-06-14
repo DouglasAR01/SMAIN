@@ -21,6 +21,8 @@ namespace MicroServicio.Entities
         public string password { get; set; }
         public string token { get; set; }
 
+        //Relación 1 a n cuentas.
+        public ICollection<Cuenta> cuentas { get; set; }
 
     }
 }
