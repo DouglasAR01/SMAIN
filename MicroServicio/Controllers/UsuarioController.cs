@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using MicroServicio.Contexts;
 using MicroServicio.Entities;
 using MicroServicio.Services;
@@ -74,31 +76,37 @@ namespace MicroServicio.Controllers
         [HttpPost("transferir")]
         public IActionResult Transferir([FromBody]DatosTransferir data )
         {
-
-            ICuentaService cuentaService = new CuentaService(this.context);
-
-            //Verifica el monto
-            if( data.monto <= 0){
-                return BadRequest(new { message = "El monto a transferir no puede ser negativo o igual a 0." });
-            }
-
-            //Veridica que el usuario logeado sea el propietario de la cuenta de origen
-            if ( !cuentaService.IsUserOwner(data.numCuentaOrigen, User.Identity.Name) ){
-                return Forbid();
-            }
-
-            //Verifica que el nombre otorgado del usuario de desstino corresponda con la cuenta el nombre del propietario de la cuenta de destino
-            if ( !cuentaService.IsNameUserOwner(data.numCuentaDestino, data.nameDestino) ){
-                return BadRequest(new { message = "El nombre no coincide con el propietario de la cuenta de destino." });
-            }
-
-            //Verifica que tiene fondos sufucientes
-            if ( !cuentaService.IsEnoughMoney(data.numCuentaOrigen, data.monto) ){
-                return BadRequest(new { message = "No tiene los fondos suficientes para realizar esta transaccion." });
-            }
-
             try{
-                cuentaService.Transaccion(data.numCuentaOrigen, data.numCuentaDestino, data.monto);
+                // Casting
+                Debug.WriteLine(data.monto);
+                decimal? monto = decimal.Parse(data.monto, new NumberFormatInfo() { NumberDecimalSeparator = "." });
+                Debug.WriteLine(monto);
+                ulong? numCuentaOrigen = Convert.ToUInt64(data.numCuentaOrigen);
+                ulong? numCuentaDestino = Convert.ToUInt64(data.numCuentaDestino);
+
+                ICuentaService cuentaService = new CuentaService(this.context);
+
+                //Verifica el monto
+                if( monto <= 0){
+                    return BadRequest(new { message = "El monto a transferir no puede ser negativo o igual a 0." });
+                }
+
+                //Veridica que el usuario logeado sea el propietario de la cuenta de origen
+                if ( !cuentaService.IsUserOwner(numCuentaOrigen, User.Identity.Name) ){
+                    return Forbid();
+                }
+
+                //Verifica que el nombre otorgado del usuario de desstino corresponda con la cuenta el nombre del propietario de la cuenta de destino
+                if ( !cuentaService.IsNameUserOwner(numCuentaDestino, data.nameDestino) ){
+                    return BadRequest(new { message = "El nombre no coincide con el propietario de la cuenta de destino." });
+                }
+
+                //Verifica que tiene fondos sufucientes
+                if ( !cuentaService.IsEnoughMoney(numCuentaOrigen, monto) ){
+                    return BadRequest(new { message = "No tiene los fondos suficientes para realizar esta transaccion." });
+                }
+
+                cuentaService.Transaccion(numCuentaOrigen, numCuentaDestino, monto);
                 return Ok(new { message = "Transaccion efectuada con exito." });
             }catch(Exception){
                 return BadRequest(new { message = "Error en el servidor." });

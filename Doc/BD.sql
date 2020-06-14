@@ -12,7 +12,7 @@ CREATE  TABLE Usuario(
 );
 CREATE TABLE Cuenta(
   id SERIAL,
-  balance DECIMAL NOT NULL,
+  balance numeric(65,30) NOT NULL,
   id_usuario BIGINT UNSIGNED,
   PRIMARY KEY (id),
   FOREIGN KEY (id_usuario) REFERENCES Usuario(id)
