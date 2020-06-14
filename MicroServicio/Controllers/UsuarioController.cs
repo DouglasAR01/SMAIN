@@ -26,8 +26,19 @@ namespace MicroServicio.Controllers
             this.context = context;
             _userService = userService;
         }
-        
 
+        /// <summary>
+        ///     Si es administrador permite ver de forma individal los datos de los usuarios, 
+        ///     si no es administrador solo puede ver sus propios datos.
+        /// </summary>
+        /// <param name="id"> Cedula de un usuario </param>
+        /// <remarks>
+        ///     Request **simple**:
+        ///         GET /api/usuario/{id}
+        /// </remarks>
+        /// <response code="200"> Los datos del usuario consultado. </response>
+        /// <response code="403"> No es administrador e intenta obtener datos de otro usuario. </response>
+        /// <response code="404"> No existe un usuario con la cedula administrada.  </response>
         [HttpGet("{id}")]
         public IActionResult GetById(string id)
         {
@@ -48,6 +59,14 @@ namespace MicroServicio.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        ///    Envia todos los datos de todas las cuentas del usuario loggeado.
+        /// </summary>
+        /// <remarks>
+        ///     Request **simple**:
+        ///         GET /api/usuario/cuentas
+        /// </remarks>
+        /// <response code="200"> Vector con los datos de todas las cuentas </response>
         [HttpGet("cuentas")]
         public IActionResult GetMisCuentas()
         {
@@ -57,9 +76,9 @@ namespace MicroServicio.Controllers
         }
 
         /// <summary>
-        ///     Realiza una transaccion de uns cuenta a otra
+        ///     Realiza una transaccion de uns cuenta a otra.
         /// </summary>
-        /// <param name="data"> </param>
+        /// <param name="data"> Datos necesarios para realizar la transacción. </param>
         /// <remarks>
         ///     Request **simple**:
         ///         POST /api/usuario/transferir
@@ -71,7 +90,7 @@ namespace MicroServicio.Controllers
         ///         }
         /// </remarks>
         /// <response code="200"> Transaccion efectuada con exito. </response>
-        /// <response code="401"> No logeado o intenta transferir de una cuenta de la que no es propietaria. </response>
+        /// <response code="403"> No logeado o intenta transferir de una cuenta de la que no es propietaria. </response>
         [HttpPost("transferir")]
         public IActionResult Transferir([FromBody]DatosTransferir data )
         {

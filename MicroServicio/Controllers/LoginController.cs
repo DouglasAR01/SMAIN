@@ -20,6 +20,20 @@ namespace MicroServicio.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        ///    Permite a un paciente hacer el login.
+        /// </summary>
+        /// <param name="userParam"> La cedula y la contrasela del usuario. </param>
+        /// <remarks>
+        ///     Request **simple**:
+        ///         POST /api/login/authenticate
+        ///         {
+        ///         	"cedula":"101",
+        ///         	"password":"prueba"
+        ///         }
+        /// </remarks>
+        /// <response code="200"> Otorga los datos del usuario y el token. </response>
+        /// <response code="400"> Cedula o contraseña incorrecta. </response>
         [AllowAnonymous]
         [HttpPost]
         [Route("authenticate")]
