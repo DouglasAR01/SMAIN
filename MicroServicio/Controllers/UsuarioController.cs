@@ -54,6 +54,23 @@ namespace MicroServicio.Controllers
             return Ok(cuentas);
         }
 
+        /// <summary>
+        ///     Realiza una transaccion de uns cuenta a otra
+        /// </summary>
+        /// <param name="data"> </param>
+        /// <remarks>
+        ///     Request **simple**:
+        ///         POST /api/usuario/transferir
+        ///         {
+        ///         	"numCuentaOrigen":2,
+        ///         	"numCuentaDestino":3,
+        ///         	"nameDestino":"James",
+        ///         	"monto":12
+        ///         }
+        /// </remarks>
+        /// <response code="200"> Transaccion efectuada con exito. </response>
+        /// <response code="401"> No logeado o intenta transferir de una cuenta de la que no es propietaria. </response>
+        /// <returns></returns>
         [HttpPost("transferir")]
         public IActionResult Transferir([FromBody]DatosTransferir data )
         {
