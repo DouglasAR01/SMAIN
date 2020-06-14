@@ -96,7 +96,7 @@ namespace MicroServicio.Controllers
         {
             try{
                 // Casting
-                decimal? monto = Convert.ToDecimal(data.monto);
+                decimal? monto = Convert.ToDecimal(data.monto, new NumberFormatInfo() { NumberDecimalSeparator = "." });
                 ulong? numCuentaOrigen = Convert.ToUInt64(data.numCuentaOrigen);
                 ulong? numCuentaDestino = Convert.ToUInt64(data.numCuentaDestino);
 
