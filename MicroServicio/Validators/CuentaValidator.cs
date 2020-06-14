@@ -12,7 +12,7 @@ namespace MicroServicio.Validators
         [RegularExpression(@"^\d+$", ErrorMessage = "El numero de cuenta debe ser numerica y positiva.")]
         public ulong? numCuenta { get; set; }
         [Required(ErrorMessage = "El monto a modificar es requerido.")]
-        [RegularExpression(@"^\d+.{0,1}\d+$", ErrorMessage = "El monto debe ser numerico y positivo.")]
+        [RegularExpression(@"^\d+\,{0,1}\d+$", ErrorMessage = "El monto debe ser numerico y positivo.")]
         public decimal? nuevoBalance { get; set; }
     }
 }

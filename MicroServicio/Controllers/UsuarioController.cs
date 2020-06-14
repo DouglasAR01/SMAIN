@@ -72,15 +72,12 @@ namespace MicroServicio.Controllers
         /// </remarks>
         /// <response code="200"> Transaccion efectuada con exito. </response>
         /// <response code="401"> No logeado o intenta transferir de una cuenta de la que no es propietaria. </response>
-        /// <returns></returns>
         [HttpPost("transferir")]
         public IActionResult Transferir([FromBody]DatosTransferir data )
         {
             try{
                 // Casting
-                Debug.WriteLine(data.monto);
-                decimal? monto = decimal.Parse(data.monto, new NumberFormatInfo() { NumberDecimalSeparator = "." });
-                Debug.WriteLine(monto);
+                decimal? monto = Convert.ToDecimal(data.monto);
                 ulong? numCuentaOrigen = Convert.ToUInt64(data.numCuentaOrigen);
                 ulong? numCuentaDestino = Convert.ToUInt64(data.numCuentaDestino);
 
@@ -89,6 +86,16 @@ namespace MicroServicio.Controllers
                 //Verifica el monto
                 if( monto <= 0){
                     return BadRequest(new { message = "El monto a transferir no puede ser negativo o igual a 0." });
+                }
+
+                //Existen las cuentas?
+                if (cuentaService.GetById(numCuentaOrigen) == null)
+                {
+                    return NotFound(new { message = "Cuenta de origen no encontrada." });
+                }
+                if (cuentaService.GetById(numCuentaDestino) == null)
+                {
+                    return NotFound(new { message = "Cuenta de destino no encontrada." });
                 }
 
                 //Veridica que el usuario logeado sea el propietario de la cuenta de origen
@@ -108,6 +115,7 @@ namespace MicroServicio.Controllers
 
                 cuentaService.Transaccion(numCuentaOrigen, numCuentaDestino, monto);
                 return Ok(new { message = "Transaccion efectuada con exito." });
+
             }catch(Exception){
                 return BadRequest(new { message = "Error en el servidor." });
             }

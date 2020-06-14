@@ -94,5 +94,6 @@ namespace MicroServicio.Controllers
             cuentaService.SetBalance(cuentaOriginal, cuenta.nuevoBalance);
             return Ok(new { numCuenta = cuentaOriginal.id, nuevoBalance = cuentaOriginal.balance });
         }
+
     }
 }

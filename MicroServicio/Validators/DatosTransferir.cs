@@ -17,7 +17,7 @@ namespace MicroServicio.Validators
         public string nameDestino { get; set; }
 
         [Required(ErrorMessage = "El monto es requerido.")]
-        [RegularExpression(@"^\d+.{0,1}\d+$", ErrorMessage = "El monto debe ser un numero positivo.")]
+        [RegularExpression(@"^\d+\,{0,1}\d+$", ErrorMessage = "El monto debe ser un numero positivo.")]
         public string monto { get;set; }
         
     }
