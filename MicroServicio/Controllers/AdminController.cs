@@ -29,10 +29,6 @@ namespace MicroServicio.Controllers
         [HttpPost("users")]
         public IActionResult CrearUsuario([FromBody]UsuarioValidator atributosUsuario)
         {
-            if (!UsuarioValidator.ValidarDatosUsuario(atributosUsuario))
-            {
-                return BadRequest(new { message = "Uno o más datos son incorrectos." });
-            }
             Usuario nuevoUsuario = _userService.CreateUser(atributosUsuario);
             if (nuevoUsuario == null)
             {
@@ -52,10 +48,6 @@ namespace MicroServicio.Controllers
                 return NotFound(new { message = "Usuario no encontrado." });
             }
 
-            if (!UsuarioValidator.ValidarDatosUsuario(atributosUsuario))
-            {
-                return BadRequest(new { message = "Uno o más datos son incorrectos." });
-            }
             usuario = _userService.UpdateData(usuario, atributosUsuario);
 
             if (usuario == null)
@@ -63,7 +55,7 @@ namespace MicroServicio.Controllers
                 return BadRequest(new { message = "El usuario no ha podido ser modificado." });
             }
 
-            return Ok(atributosUsuario);
+            return Ok(usuario);
         }
 
         [HttpDelete("users/{id}/eliminar")]
