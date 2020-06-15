@@ -70,7 +70,7 @@ namespace MicroServicio.Controllers
         /// </remarks>
         /// <response code="200"> Vector con los datos de todas las cuentas </response>
         [HttpGet("cuentas")]
-        public IActionResult GetMisCuentas()
+        public virtual IActionResult GetMisCuentas()
         {
             ICuentaService cuentaObj = new CuentaService(this.context);
             IEnumerable<Cuenta> cuentas = cuentaObj.GetByUser(User.Identity.Name);

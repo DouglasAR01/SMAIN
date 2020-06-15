@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 using MicroServicio.Contexts;
 using MicroServicio.Entities;
 using MicroServicio.Services;
+using MicroServicio.SwaggerExamples.Requests;
 using MicroServicio.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace MicroServicio.Controllers
 {
@@ -36,6 +38,7 @@ namespace MicroServicio.Controllers
         /// <summary>
         ///     Permite al administrador ver a usuarios de forma individual en el sistema.
         /// </summary>
+        /// <param name="id" example="103">La cédula del usuario a visualizar</param>
         /// <response code="200"> Datos individuales de un usuario. </response>
         /// <response code="401"> No es administrador, por lo tanto prohibe el acceso.</response>
         /// <response code="404"> El usuario al que se quiere visualizar no fue encontrado.</response>
@@ -50,7 +53,9 @@ namespace MicroServicio.Controllers
         /// <response code="200"> Retorna el usuario recién creado. </response>
         /// <response code="400"> No se pudo crear un usuario debido posiblemente a que la cédula es incorrecta.</response>
         /// <response code="401"> No es administrador, por lo tanto prohibe el acceso.</response>
+        
         [HttpPost("users")]
+        [SwaggerRequestExample(typeof(UsuarioValidator),typeof(CrearUsuarioExample))]
         public IActionResult CrearUsuario([FromBody]UsuarioValidator atributosUsuario)
         {
             Usuario nuevoUsuario = _userService.CreateUser(atributosUsuario);
@@ -65,11 +70,13 @@ namespace MicroServicio.Controllers
         ///     Permite al administrador modificar la información de un usuario.
         ///     Requiere que se le envíen todos los datos del usuario.
         /// </summary>
+        /// <param name="id" example="102">La cédula del usuario a modificar</param>
         /// <response code="200"> Retorna la información del usuario modificado. </response>
         /// <response code="400"> No se pudo modificar el usuario, posiblemente porque su cédula es incorrecta.</response>
         /// <response code="401"> No es administrador, por lo tanto prohibe el acceso.</response>
         /// <response code="404"> El usuario al que se quiere modificar no fue encontrado.</response>
         [HttpPatch("users/{id}/editar")]
+        [SwaggerRequestExample(typeof(UsuarioValidator),typeof(EditarUsuarioExample))]
         public IActionResult EditarUsuario(string id, [FromBody]UsuarioValidator atributosUsuario)
         {
             var usuario = _userService.GetById(id);
@@ -92,6 +99,7 @@ namespace MicroServicio.Controllers
         /// <summary>
         ///     Permite al administrador eliminar un usuario.
         /// </summary>
+        /// <param name="id" example="400">Cédula del usuario a eliminar</param>
         /// <response code="200"> El usuario fue eliminado correctamente. </response>
         /// <response code="400"> No se pudo eliminar el usuario, posiblemente porque su cédula es incorrecta.</response>
         /// <response code="401"> No es administrador, por lo tanto prohibe el acceso.</response>
@@ -114,6 +122,18 @@ namespace MicroServicio.Controllers
         }
 
         /// <summary>
+        ///     Permite al administrador ver todas las cuentas del sistema.
+        /// </summary>
+        /// <response code="200"> Retorna todas las cuentas registradas en el sistema. </response>
+        /// <response code="401"> No es administrador, por lo tanto prohibe el acceso.</response>
+        [HttpGet("cuentas")]
+        public override IActionResult GetMisCuentas()
+        {
+            ICuentaService cuentaService = new CuentaService(this.context);
+            return Ok(cuentaService.GetAll());
+        }
+
+        /// <summary>
         ///     Permite al administrador modificar el balance de una cuenta.
         ///     Se debe de enviar el número del nuevo balance. Por ejemplo, si se le quieren restar
         ///     $200 a un balance de $1000, el número del balance que se debe de enviar es el resultado,
@@ -123,7 +143,8 @@ namespace MicroServicio.Controllers
         /// <response code="400"> El formato del número de cuenta o del balance es incorrecto.</response>
         /// <response code="401"> No es administrador, por lo tanto prohibe el acceso.</response>
         /// <response code="404"> La cuenta a editar el balance no fue encontrada.</response>
-        [HttpPatch("cuentas/{id}/editar")]
+        [HttpPatch("cuentas/editar")]
+        [SwaggerRequestExample(typeof(CuentaValidator), typeof(EditarBalanceExample))]
         public IActionResult EditarBalance([FromBody]CuentaValidator cuenta)
         {
             try
