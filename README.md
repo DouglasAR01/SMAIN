@@ -4,7 +4,8 @@ Por simplicidad, el rol 'administrador' podrá ser una propiedad role de los usu
 Se utiliza JWT para la autenticación y autorización a los endpoints securizados.
 Además las contraseñas fueron cifrandas de texto plano a un hash unico apartir del algoritmo de cifrado SHA512 y una cadena aleatoria introducida la principio del texto plano comúnmente llamado como SALT.
 
-# Dependencias
+# Dependencias e instalación
+El proyecto se encuentra alojado en la carpeta MicroServicio y en la carpeta Doc se encuentra el archivo .sql con la estructura y algunos datos base para realizar pruebas.
 1. Backend
   1. 1. Microsoft.AspNetCore.App==2.1.1
   1. 2. Microsoft.AspNetCore.Razor.Design==2.1.1
