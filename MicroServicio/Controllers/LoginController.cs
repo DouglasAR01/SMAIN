@@ -24,11 +24,11 @@ namespace MicroServicio.Controllers
         }
 
         /// <summary>
-        ///    Permite a un usuario hacer el login.
+        ///    Permite a un usuario autenticarse.
         /// </summary>
-        /// <param name="userParam"> La cedula y la contraseña del usuario. </param>
+        /// <param name="userParam"> La cédula y la contraseña del usuario. </param>
         /// <response code="200"> Otorga los datos del usuario y el token. </response>
-        /// <response code="400"> Cedula o contraseña incorrecta. </response>
+        /// <response code="400"> Cédula o contraseña incorrecta. </response>
         [AllowAnonymous]
         [HttpPost]
         [Route("authenticate")]

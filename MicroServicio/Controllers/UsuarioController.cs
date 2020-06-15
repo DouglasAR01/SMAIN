@@ -30,17 +30,13 @@ namespace MicroServicio.Controllers
         }
 
         /// <summary>
-        ///     Si es administrador permite ver de forma individal los datos de los usuarios, 
+        ///     Si es administrador permite ver de forma individual los datos de los usuarios, 
         ///     si no es administrador solo puede ver sus propios datos.
         /// </summary>
-        /// <param name="id" example="101"> Cedula de un usuario </param>
-        /// <remarks>
-        ///     Request **simple**:
-        ///         GET /api/usuario/{id}
-        /// </remarks>
+        /// <param name="id" example="101"> Cédula de un usuario </param>
         /// <response code="200"> Los datos del usuario consultado. </response>
         /// <response code="403"> No es administrador e intenta obtener datos de otro usuario. </response>
-        /// <response code="404"> No existe un usuario con la cedula administrada.  </response>
+        /// <response code="404"> No existe un usuario con la cédula administrada.  </response>
         [HttpGet("{id}")]
         public virtual IActionResult GetById(string id)
         {
@@ -51,7 +47,6 @@ namespace MicroServicio.Controllers
                 return NotFound();
             }
 
-            // only allow admins to access other user records
             var currentUserId = User.Identity.Name;
             if (id != currentUserId && !User.IsInRole("a"))
             {
@@ -64,10 +59,6 @@ namespace MicroServicio.Controllers
         /// <summary>
         ///    Envia todos los datos de todas las cuentas del usuario loggeado.
         /// </summary>
-        /// <remarks>
-        ///     Request **simple**:
-        ///         GET /api/usuario/cuentas
-        /// </remarks>
         /// <response code="200"> Vector con los datos de todas las cuentas </response>
         [HttpGet("cuentas")]
         public virtual IActionResult GetMisCuentas()
@@ -78,24 +69,14 @@ namespace MicroServicio.Controllers
         }
 
         /// <summary>
-        ///     Realiza una transaccion de uns cuenta a otra.
+        ///     Realiza una transacción de una cuenta a otra.
         /// </summary>
         /// <param name="data"> Datos necesarios para realizar la transacción. </param>
-        /// <remarks>
-        ///     Request **simple**:
-        ///         POST /api/usuario/transferir
-        ///         {
-        ///         	"numCuentaOrigen":2,
-        ///         	"numCuentaDestino":3,
-        ///         	"nameDestino":"James",
-        ///         	"monto":12
-        ///         }
-        /// </remarks>
         /// <response code="200"> Transaccion efectuada con exito. </response>
-        /// <response code="403"> No logeado o intenta transferir de una cuenta de la que no es propietaria. </response>
+        /// <response code="403"> No esta autenticado o intenta transferir de una cuenta de la que no es propietaria. </response>
         [HttpPost("transferir")]
         [SwaggerRequestExample(typeof(DatosTransferir), typeof(TransferirExample))]
-        public IActionResult Transferir([FromBody]DatosTransferir data )
+        public virtual IActionResult Transferir([FromBody]DatosTransferir data )
         {
             try{
                 // Casting
